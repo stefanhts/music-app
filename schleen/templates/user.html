@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for usr in usrs %}
+<div class="text-center">
+    <div class="col-md-12 col-md-offset-1 justify-content-center">
+        <h1>{{ usr.username }}</h1>
+    </div>
+    <div class="col-md-12 col-md-offset-2 font-italic">
+        <h4>{{ usr.desc }}</h4>
+    </div>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="text center">
+        <div class="albums">
+            My favorite albums:
+<!--            <ol>-->
+<!--               {% for album in usr.albums %}-->
+<!--                <li>{{ album }}</li>-->
+<!--                {% endfor %}-->
+<!--            </ol>-->
+        </div>
+        <div class="songs">
+            My favorite songs
+<!--            <ol>-->
+<!--                {% for song in usr.songs %}-->
+<!--                <li>{{ song }}</li>-->
+<!--                {% endfor %}-->
+<!--            </ol>-->
+        </div>
+        <img src="{{usr.usr_img.url}}" width="50px" height="50px">
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,8 +1,6 @@
 from django.db import models
 
 class User(models.Model):
-
-
     usr_username = models.CharField(max_length=100)
     usr_desc = models.TextField()
     # cust_songs = [models.CharField(max_length=100)]

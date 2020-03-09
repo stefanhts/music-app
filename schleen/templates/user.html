@@ -1,34 +1,65 @@
 {% extends 'base.html' %}
 {% block content %}
-{% for usr in usrs %}
-<div class="text-center">
-    <div class="col-md-12 col-md-offset-1 justify-content-center">
-        <h1>{{ usr.username }}</h1>
-    </div>
-    <div class="col-md-12 col-md-offset-2 font-italic">
-        <h4>{{ usr.desc }}</h4>
-    </div>
-</div>
-<div class="d-flex justify-content-center">
-    <div class="text center">
-        <div class="albums">
-            My favorite albums:
-<!--            <ol>-->
-<!--               {% for album in usr.albums %}-->
-<!--                <li>{{ album }}</li>-->
-<!--                {% endfor %}-->
-<!--            </ol>-->
-        </div>
-        <div class="songs">
-            My favorite songs
-<!--            <ol>-->
-<!--                {% for song in usr.songs %}-->
-<!--                <li>{{ song }}</li>-->
-<!--                {% endfor %}-->
-<!--            </ol>-->
-        </div>
-        <img src="{{usr.usr_img.url}}" width="50px" height="50px">
+
+<div class="container container-fluid">
+    <div class="jumbotron">
+        <h1 class="display-3">{{ user.first_name }}</h1>
+        <p class="lead">{{ user.first_name }}'s tastes: % current music themes popular to user... %</p>
+        <hr class="my-4">
+        <p class="lead">
+            <h4 class="display-4">{{ user.first_name }}'s favorite songs right now:</h4>
+            <div class="container fav-songs">
+                <ul>
+                    {% for rec in list %}
+                        <li><div class="song">
+                            <p><span>{{ rec.title }}</span> -- <span> {{ rec.artist }}</span></p>
+                        </div> </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="topsongs">customize</a>
+        </p>
     </div>
 </div>
-{% endfor %}
+
+
+
+
+
+
+
+
+<!--{% for usr in usrs %}-->
+<!--<div class="text-center">-->
+<!--    <div class="col-md-12 col-md-offset-1 justify-content-center">-->
+<!--        <h1>{{ usr.username }}</h1>-->
+<!--    </div>-->
+<!--    <div class="col-md-12 col-md-offset-2 font-italic">-->
+<!--        <h4>{{ usr.desc }}</h4>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<div class="d-flex justify-content-center">-->
+<!--    <div class="text center">-->
+<!--        <div class="albums">-->
+<!--            My favorite albums:-->
+<!--&lt;!&ndash;            <ol>&ndash;&gt;-->
+<!--&lt;!&ndash;               {% for album in usr.albums %}&ndash;&gt;-->
+<!--&lt;!&ndash;                <li>{{ album }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;            </ol>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <div class="songs">-->
+<!--            My favorite songs-->
+<!--&lt;!&ndash;            <ol>&ndash;&gt;-->
+<!--&lt;!&ndash;                {% for song in usr.songs %}&ndash;&gt;-->
+<!--&lt;!&ndash;                <li>{{ song }}</li>&ndash;&gt;-->
+<!--&lt;!&ndash;                {% endfor %}&ndash;&gt;-->
+<!--&lt;!&ndash;            </ol>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <img src="{{usr.usr_img.url}}" width="50px" height="50px">-->
+<!--    </div>-->
+<!--</div>-->
+<!--{% endfor %}-->
 {% endblock %}

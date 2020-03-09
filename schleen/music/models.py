@@ -1,19 +1,56 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
 
-class User(models.Model):
-    usr_username = models.CharField(max_length=100)
-    usr_desc = models.TextField()
-    # cust_songs = [models.CharField(max_length=100)]
-    # cust_albums = [models.CharField(max_length=100)]
-    usr_img = models.ImageField(upload_to='pics')
+class Artist(models.Model):
+    name = models.CharField(max_length=50)
 
 
+class Album(models.Model):
+    name = models.CharField(max_length=80)
+
+    artist = models.ForeignKey(
+        'Artist',
+        on_delete=models.CASCADE,
+        null=True
+    )
+
+class Songs(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='created_by',
+        null=True
+    )
+
+    name = models.CharField(max_length=100)
 
 class Song(models.Model):
-    title = models.CharField(max_length=100)
-    artist = models.CharField(max_length=100)
-    date = models.DateField()
+    name = models.CharField(max_length=100)
+
+    artist = models.ForeignKey(
+        'Artist',
+        on_delete=models.CASCADE,
+        related_name='artist',
+        null=True
+    )
+
+    album = models.ForeignKey(
+        'Album',
+        on_delete=models.CASCADE,
+        related_name='album',
+        null=True
+    )
+
+    songs = models.ManyToManyField(
+        Songs,
+        related_name='song'
+    )
 
 
-class SongList(models.Model):
-    list = [Song]
+
+
+
+
+
+

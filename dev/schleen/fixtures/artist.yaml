@@ -1,0 +1,20 @@
+- model: music.Artist
+  pk: 1
+  fields:
+    name=strfkr
+- model: music.Artist
+  pk: 2
+  fields:
+    name=Pink Floyd
+- model: music.Artist
+  pk: 3
+  fields:
+  name=Grimes
+- model: music.Artist
+  pk: 4
+  fields:
+  name=Disclosure
+- model: music.Artist
+  pk: 5
+  fields:
+  name=Capstan

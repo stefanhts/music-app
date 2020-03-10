@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'music.apps.MusicConfig',
+    'accounts.apps.AccountsConfig',
+    'auth_fix.apps.AuthFixConfig',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +75,8 @@ WSGI_APPLICATION = 'schleen.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+#TODO Development db settings should go here, comment out the production one to use your development
 
 DATABASES = {
     'default': {
@@ -133,4 +137,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'boot'),
 ]
+
 

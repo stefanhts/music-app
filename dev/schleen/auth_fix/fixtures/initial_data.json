@@ -1,0 +1,15 @@
+[
+    {
+    "model": "auth.permission",
+    "pk": 1,
+     "fields":
+     {
+     "name": "Can add log entry",
+      "content_type": 1,
+       "codename": "add_logentry"
+       }
+    }
+    ,
+    {"model": "auth.user", "pk": 1, "fields": {"password": "pbkdf2_sha256$180000$FebdNSUpoLz9$NcZyusPADWvX7Z6rv5KBLICMZnSu06i1fYvYrFPhsSo=", "last_login": "2020-03-07T03:55:58.846Z", "is_superuser": true, "username": "admin", "first_name": "", "last_name": "", "email": "stefan.heller00@gmail.com", "is_staff": true, "is_active": true, "date_joined": "2020-03-07T03:55:22.838Z", "groups": [], "user_permissions": []}}
+    , {"model": "auth.user", "pk": 2, "fields": {"password": "pbkdf2_sha256$180000$IVdQe4MvhXum$PPMUMygfpuQJJAumEvo3hVQRSgnBSWfbLtTUd9f5XNE=", "last_login": "2020-03-10T01:31:11.951Z", "is_superuser": false, "username": "stefan", "first_name": "stefan", "last_name": "heller", "email": "stefan@heller.com", "is_staff": false, "is_active": true, "date_joined": "2020-03-08T00:16:00.456Z", "groups": [], "user_permissions": []}}
+]

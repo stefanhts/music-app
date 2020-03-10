@@ -1,0 +1,26 @@
+Ok bois listen up, here are the instructions for how to work on this project:
+
+1) Install an IDE, I highly recommend PyCharm, followed by VS code or visual stuio
+
+2) Make sure you have git installed, if not, go to https://git-scm.com/downloads to download, or run: sudo apt install git on linux
+
+3) Go through a brief git tutorial, or learn on the fly, it's your choice (https://product.hubspot.com/blog/git-and-github-tutorial-for-beginners)
+
+4) This is where things start to get new, create a virtual environment to do your development in, otherwise there will be issues. Info for this can
+be found @ https://programwithus.com/learn-to-code/Pip-and-virtualenv-on-Windows/
+
+5) In your git command line type git clone https://github.com/stefanhts/music-app.git
+
+6) Create a new branch labeled after the issue you will focus on:
+git branch <branchname>
+git checkout <branchname>
+
+7) Get to work. I've done my best to document what I've done. We can communicate in the slack and make tickets as to what should be priority, what should
+change, etc. Currently I am trying to figure out fixtures so that we can have test data available that is no in the production server which is currently on
+my machine. I highly recommend watching checking out https://youtube.com/telusko he has a great series on django that might help explain things. I also
+encourage you to check out the django docs: https://docs.djangoproject.com/en/3.0/
+these are one of the best resources there is.
+
+-Happy hacking,
+Stefan
+

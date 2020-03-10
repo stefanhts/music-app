@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
-from .models import Song, Songs, Artist, Album
+from .models import Song, Songs_list, Artist, Album
+from django.db import IntegrityError
 from django.contrib import messages
 import datetime
 
 #TODO disalow empty fields and duplicate songs
+
+ERROR_MESSAGE = 'Uh oh, something went wrong... We\'ll get right on it'
 
 def home(request):
     return render(request, 'home.html')
@@ -11,7 +14,7 @@ def home(request):
 
 def user(request):
 
-    lists = Songs.objects.filter(user=request.user, name='top 5').order_by('-id')[:5][::-1]
+    lists = Songs_list.objects.filter(user=request.user, name='top 5').order_by('-id')[:5][::-1]
 
     list = []
     for e in lists:
@@ -22,6 +25,8 @@ def user(request):
 
 def topsongs(request):
 #TODO This should be generalized for creating any type of list. We don't want duplicate songs in our db
+
+#This checks if request is POST if so gets data, if not redirects
     if request.method == 'POST':
 
         artists = [
@@ -46,47 +51,67 @@ def topsongs(request):
         #TODO generalize this
         list = 'top 5'
 
+
+#adds each artist,song, etc. and checks for duplicates/handles erros
         for i in range(len(artists)):
             cur_art = artists[i]
             cur_song = songnames[i]
             artist = Artist.objects.create(name=cur_art)
-            artist.save()
+            #add
+            try:
+                artist.save()
+            except Exception as ex:
+                if type(ex) == IntegrityError:
+                    pass
+                else:
+                    messages.info(request, ERROR_MESSAGE)
+                    handle_errors(ex)
+
+
             album = Album.objects.create(name=cur_alb, artist=artist)
-            album.save()
+
+            try:
+                album.save()
+            except Exception as ex:
+                if type(ex) == IntegrityError:
+                    pass
+                else:
+                    messages.info(request, ERROR_MESSAGE)
+                    handle_errors(ex)
+
             song = Song.objects.create(name=cur_song, album=album, artist=artist)
-            song.save()
-            songs= Songs.objects.create(user=request.user, name=list)
+            try:
+                song.save()
+            except Exception as ex:
+                if type(ex) == IntegrityError:
+                    pass
+                else:
+                    messages.info(request, ERROR_MESSAGE)
+                    handle_errors(ex)
+
+            songs= Songs_list.objects.create(user=request.user, name=list)
             songs.song.add(song)
-            songs.save()
+
+            try:
+                songs.save()
+            except Exception as ex:
+                if type(ex) == IntegrityError:
+                    pass
+                else:
+                    messages.info(request, ERROR_MESSAGE)
+                    handle_errors(ex)
 
         #TODO don't add duplicates, and replace if they are on the same list
-
-            # if not Song.objects.filter(artist=cur_art, name=cur_song).exists():
-            #     if not Album.objects.filter(name=cur_alb).exitsts():
-            #         if not Artist.objects.filter(name=cur_art).exists():
-            #             artist = Artist.objects.create(artist=cur_art)
-            #             artist.save()
-            #         else:
-            #             artist = Artist.objects.get(name=cur_art)
-            #         album = Album.objects.create(name=album, artist=artist)
-            #         album.save()
-            #     else:
-            #         album = Album.objects.get(name=album, artist=artist)
-            #     song = Song.objects.create(name=cur_song, album=album, artist=artist)
-            #     song.save()
-            # else:
-            #     song = Song.objects.get(name=song, artist=artist, album=album)
-            # if not Songs.objects.filter(User=request.user, name=list, song=song).exists():
-            #     songs = Songs.objects.create(user=request.user, song=song, name=list)
-            #     songs.save()
-            # else:
-            #     messages.info(request, 'duplicate or invalid song:',song.title)
-            #     return redirect('topsongs')
 
         return redirect('/user')
 
     else:
         return render(request,'topsongs.html')
+
+
+def handle_errors(ex):
+    #TODO handle erros
+    pass
 
 
 class song_obj:

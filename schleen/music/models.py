@@ -18,7 +18,7 @@ class Album(models.Model):
     )
 
 
-    class Method:
+    class Meta:
         #disallow song artist repeats
         unique_together=[
             'artist',

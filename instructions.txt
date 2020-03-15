@@ -15,9 +15,11 @@ be found @ https://programwithus.com/learn-to-code/Pip-and-virtualenv-on-Windows
 git branch <branchname>
 git checkout <branchname>
 
-7) Get to work. I've done my best to document what I've done. We can communicate in the slack and make tickets as to what should be priority, what should
-change, etc. Currently I am trying to figure out fixtures so that we can have test data available that is no in the production server which is currently on
-my machine. I highly recommend watching checking out https://youtube.com/telusko he has a great series on django that might help explain things. I also
+7) Initialize a sqlite development db. add this and your settings.py file to your .gitignore (you can read about .gitignore online pretty easily) file so that the db doesn't get committed each time. Data will be loaded from fixtures which
+can be found in the django docs. Settings should only be committed if you have important changes for production.
+
+8) Get to work. I've done my best to document what I've done. We can communicate in the slack and make tickets as to what should be priority, what should
+change, etc.  I highly recommend watching checking out https://youtube.com/telusko he has a great series on django that might help explain things. I also
 encourage you to check out the django docs: https://docs.djangoproject.com/en/3.0/
 these are one of the best resources there is.
 

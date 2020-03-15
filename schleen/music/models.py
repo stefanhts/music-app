@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+
 class Artist(models.Model):
-    #create artist model
+    # create artist model
     name = models.CharField(max_length=50, unique=True)
 
 
 class Album(models.Model):
-    #create album model
+    # create album model
     name = models.CharField(max_length=80)
 
     artist = models.ForeignKey(
@@ -17,17 +18,16 @@ class Album(models.Model):
         null=True
     )
 
-
     class Meta:
-        #disallow song artist repeats
-        unique_together=[
+        # disallow song artist repeats
+        unique_together = [
             'artist',
             'name'
         ]
 
 
 class Songs_list(models.Model):
-    #create songs_list model which  is linked to users who created them
+    # create songs_list model which  is linked to users who created them
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -37,8 +37,9 @@ class Songs_list(models.Model):
 
     name = models.CharField(max_length=100)
 
+
 class Song(models.Model):
-    #create song model which links to album, artist, songs_list
+    # create song model which links to album, artist, songs_list
     name = models.CharField(max_length=100)
 
     artist = models.ForeignKey(
@@ -61,17 +62,9 @@ class Song(models.Model):
     )
 
     class Meta:
-        #disallow song-artist-combo repeats
-        unique_together=[
+        # disallow song-artist-combo repeats
+        unique_together = [
             'artist',
             'name',
             'album'
         ]
-
-
-
-
-
-
-
-

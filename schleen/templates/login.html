@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Login:</h1>
-<div class="content col-md-3 justify-content-center">
-<form action="login" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Password">
-        </div>
-        <button type="submit" class="btn btn-primary">Log in</button>
-    </form>
-</div>
-<div class="alert">
-    {% for message in messages %}
-        <h4>{{message}}</h4>
-    {% endfor %}
-</div>
+    <h1>Login:</h1>
+    <div class="content col-md-3 justify-content-center">
+        <form action="login" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Log in</button>
+        </form>
+    </div>
+    <div class="alert">
+        {% for message in messages %}
+            <h4>{{ message }}</h4>
+        {% endfor %}
+    </div>
 {% endblock %}

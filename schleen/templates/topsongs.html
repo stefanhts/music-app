@@ -1,54 +1,54 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<div class="content col-md-4 justify-content-center">
-    <div class="form-header">
-        <h2 class="header"> Enter your top 5 songs</h2>
+    <div class="content col-md-4 justify-content-center">
+        <div class="form-header">
+            <h2 class="header"> Enter your top 5 songs</h2>
+        </div>
+        <form action="topsongs" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="song1">Title:</label>
+                <input type="text" name="song1" id="song1" placeholder="Happy Birthday">
+                <label for="artist1">Artist:</label>
+                <input type="text" name="artist1" id="artist1" placeholder="The Beatles">
+            </div>
+            <div class="form-group">
+                <label for="song2">Title:</label>
+                <input type="text" name="song2" id="song2" placeholder="Happy Birthday">
+                <label for="artist2">Artist:</label>
+                <input type="text" name="artist2" id="artist2" placeholder="The Beatles">
+            </div>
+            <div class="form-group">
+                <label for="song3">Title:</label>
+                <input type="text" name="song3" id="song3" placeholder="Happy Birthday">
+                <label for="artist3">Artist:</label>
+                <input type="text" name="artist3" id="artist3" placeholder="The Beatles">
+            </div>
+            <div class="form-group">
+                <label for="song4">Title:</label>
+                <input type="text" name="song4" id="song4" placeholder="Happy Birthday">
+                <label for="artist4">Artist:</label>
+                <input type="text" name="artist4" id="artist4" placeholder="The Beatles">
+            </div>
+            <div class="form-group">
+                <label for="song5">Title:</label>
+                <input type="text" name="song5" id="song5" placeholder="Happy Birthday">
+                <label for="artist5">Artist:</label>
+                <input type="text" name="artist5" id="artist5" placeholder="The Beatles">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+
     </div>
-    <form action="topsongs" method="post">
-        {% csrf_token %}
 
-        <div class="form-group">
-            <label for="song1">Title:</label>
-            <input type="text" name="song1" id="song1" placeholder="Happy Birthday">
-            <label for="artist1">Artist:</label>
-            <input type="text" name="artist1" id="artist1" placeholder="The Beatles">
-        </div>
-        <div class="form-group">
-            <label for="song2">Title:</label>
-            <input type="text" name="song2" id="song2" placeholder="Happy Birthday">
-            <label for="artist2">Artist:</label>
-            <input type="text" name="artist2" id="artist2" placeholder="The Beatles">
-        </div>
-        <div class="form-group">
-            <label for="song3">Title:</label>
-            <input type="text" name="song3" id="song3" placeholder="Happy Birthday">
-            <label for="artist3">Artist:</label>
-            <input type="text" name="artist3" id="artist3" placeholder="The Beatles">
-        </div>
-        <div class="form-group">
-            <label for="song4">Title:</label>
-            <input type="text" name="song4" id="song4" placeholder="Happy Birthday">
-            <label for="artist4">Artist:</label>
-            <input type="text" name="artist4" id="artist4" placeholder="The Beatles">
-        </div>
-        <div class="form-group">
-            <label for="song5">Title:</label>
-            <input type="text" name="song5" id="song5" placeholder="Happy Birthday">
-            <label for="artist5">Artist:</label>
-            <input type="text" name="artist5" id="artist5" placeholder="The Beatles">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
-
-</div>
-
-<div class="alert">
-    {% for message in messages %}
-        <h4>{{message}}</h4>
-    {% endfor %}
-</div>
+    <div class="alert">
+        {% for message in messages %}
+            <h4>{{ message }}</h4>
+        {% endfor %}
+    </div>
 
 
 {% endblock %}

@@ -78,13 +78,22 @@ WSGI_APPLICATION = 'schleen.wsgi.application'
 
 #TODO Development db settings should go here, comment out the production one to use your development
 
+#Production
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': 'mydatabase',
+#         'USER': 'postgres',
+#         'PASSWORD': 'root',
+#         'HOST': 'localhost'
+#     }
+# }
+
+#Development
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'schleen',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
 
@@ -137,5 +146,3 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'boot'),
 ]
-
-

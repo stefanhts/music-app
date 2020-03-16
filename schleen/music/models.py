@@ -68,3 +68,88 @@ class Song(models.Model):
             'name',
             'album'
         ]
+
+
+class Reviews(models.Model):
+    name = models.CharField(max_length=80)
+
+    text = models.TextField()
+
+    date = models.DateField()
+
+    rating = models.FloatField()
+
+    score = models.IntegerField()
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='written_by'
+    )
+
+
+class Album_Reviews(models.Model):
+    review = models.ForeignKey(
+        Reviews,
+        on_delete=models.CASCADE,
+    )
+
+    album = models.ForeignKey(
+        Album,
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        unique_together = [
+            'album',
+            'review'
+        ]
+
+
+class Artist_Reviews(models.Model):
+    review = models.ForeignKey(
+        Reviews,
+        on_delete=models.CASCADE,
+    )
+
+    artist = models.ForeignKey(
+        Artist,
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        unique_together = [
+            'artist',
+            'review'
+        ]
+
+
+class Song_Reviews(models.Model):
+    review = models.ForeignKey(
+        Reviews,
+        on_delete=models.CASCADE,
+    )
+
+    song = models.ForeignKey(
+        Song,
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        unique_together = [
+            'song',
+            'review'
+        ]
+
+
+# class Playlist_Reviews(models.Model):
+#     review = models.ForeignKey(
+#         Reviews,
+#         on_delete=models.CASCADE,
+#     )
+#
+#     playlist = models.ForeignKey(
+#         Songs_list,
+#         on_delete=models.CASCADE,
+#     )
+

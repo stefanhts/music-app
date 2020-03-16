@@ -6,5 +6,9 @@ urlpatterns = [
     path('user', views.user, name='user'),
     path('topsongs', views.topsongs, name='topsongs'),
     path('help', views.help, name='help'),
-    path('trending', views.trending, name='trending')
+    path('trending', views.trending, name='trending'),
+    path('reviews', views.user_reviews, name='reviews'),
+    path('friends', views.friends, name='friends'),
+    path('usersongs', views.user_songs, name='mysongs'),
+    path('review', views.review, name='review')
 ]

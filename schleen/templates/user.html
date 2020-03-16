@@ -8,16 +8,16 @@
                         <a class="nav-link" href="{% url 'user' %}">my music<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user' %}">my reviews</a>
+                        <a class="nav-link" href="{% url 'reviews' %}">my reviews</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user' %}">write a review</a>
+                        <a class="nav-link" href="{% url 'review' %}">write a review</a>
                     </li>
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href="{% url 'user' %}">create a playlist</a>#}
+{#                    </li>#}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user' %}">create a playlist</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'user' %}">my friends</a>
+                        <a class="nav-link" href="{% url 'friends' %}">my friends</a>
                     </li>
                 </ul>
             </div>
@@ -25,27 +25,10 @@
 
         <div class="container container-fluid">
             <div class="jumbotron rounded-bottom-corners">
-                <h1 class="display-3">{{ user.first_name }}</h1>
-                <p class="lead">{{ user.first_name }}'s tastes: % current music themes popular to user... %</p>
-                <hr class="my-4">
-                <p class="lead">
-                <h4 class="display-4">{{ user.first_name }}'s favorite songs right now:</h4>
-                <div class="container fav-songs">
-                    <ul>
-                        {% for rec in list %}
-                            <li>
-                                <div class="song">
-                                    <p><span>{{ rec.title }}</span> -- <span> {{ rec.artist }}</span></p>
-                                </div>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                </p>
-                <p class="lead">
-                    <a class="btn btn-primary btn-lg" href="topsongs">customize</a>
-                </p>
+                {% block body %}
+                {% endblock %}
             </div>
         </div>
     </div>
+
 {% endblock %}

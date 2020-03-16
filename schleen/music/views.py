@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from .models import Song, Songs_list, Artist, Album
+from .models import Song, Songs_list, Artist, Album, Reviews, Album_Reviews, Artist_Reviews, Song_Reviews
 from django.db import IntegrityError
 from django.contrib import messages
-import datetime
+from enum import Enum
+from datetime import date
 
 # TODO disalow empty fields and duplicate songs
 
@@ -21,8 +22,88 @@ def user(request):
         list.append(
             song_obj(Song.objects.filter(id=e.id).first().name, Song.objects.filter(id=e.id).first().artist.name))
 
-    return render(request, 'user.html', {'list': list})
+    return render(request, 'usersongs.html', {'list': list})
 
+
+def review(request):
+    if request.method == 'POST':
+        review_type = ReviewType(int(request.POST['type']))
+        review_text = request.POST['reviewText']
+        review_date = date.today()
+        review_score = 1
+        review_rating = float(request.POST['rating'])
+        review_subj_auth = request.POST['by']
+        review_subj = request.POST['subj']
+        review_title = request.POST
+        review_user = request.user
+
+        review = Reviews.objects.create(
+            name=review_title,
+            text=review_text,
+            date=review_date,
+            rating=review_rating,
+            score=review_score,
+            user=request.user,
+        )
+
+        try:
+            review.save()
+        except Exception as ex:
+            messages.info(request, ERROR_MESSAGE)
+            handle_errors(ex)
+
+        review_obj = object
+
+        # TODO create review and save to db
+        if review_type == ReviewType.ALBUM or review_type == ReviewType.ARTIST or review_type == ReviewType.SONG:
+            artist = Artist.objects.filter(name=review_subj_auth).first()
+            if review_type == ReviewType.ALBUM:
+                album = Album.objects.filter(name=review_subj, artist=artist).first()
+                review_obj = Album_Reviews.objects.create(
+                    review=review,
+                    album=album,
+                )
+            elif review_type == ReviewType.SONG:
+                album = Album.objects.filter(name=review_subj, artist=artist).first()
+                song = Song.object.create(
+                    name=review_subj,
+                    artist=artist,
+                    album=album
+                )
+                review_obj = Song_Reviews.objects.create(
+                    review=review,
+                    song=song,
+                )
+            else:
+                review_obj = Artist_Reviews.objects.create(
+                    review=review,
+                    artist=artist
+                )
+        else:
+            # TODO implement playlist reviews
+            pass
+
+        try:
+            review_obj.save()
+        except Exception as ex:
+            messages.info(request, ERROR_MESSAGE)
+            handle_errors(ex)
+        return redirect('review')
+
+    else:
+        return render(request,'user.html')
+
+
+def user_reviews(request):
+    return render(request,'userreviews.html',{'list':''})
+
+
+def user_songs(request):
+    return render(request,'usersongs.html',{'list':''})
+
+
+def friends(request):
+    return render(request,'userfriends.html',{'list':''})
 
 def topsongs(request):
     # TODO This should be generalized for creating any type of list. We don't want duplicate songs in our db
@@ -113,12 +194,19 @@ def trending(request):
 
 
 def help(request):
-    return render(request,'help.html')
+    return render(request, 'help.html')
 
 
 def handle_errors(ex):
     # TODO handle errors, possibly send an email to dev team
     pass
+
+
+class ReviewType(Enum):
+    ALBUM = 1
+    SONG = 2
+    PLAYLIST = 3
+    ARTIST = 4
 
 
 class song_obj:

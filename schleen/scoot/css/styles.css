@@ -12,6 +12,22 @@ html, body {
     overflow-x: hidden;
 }
 
+@font-face {
+    font-family: 'Sniglet';
+    src: url('../../static/admin/fonts/Sniglet-Regular.woff2') format('woff2'),
+        url('../../static/admin/fonts/Sniglet-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sniglet';
+    src: url('../../static/admin/fonts/Sniglet-ExtraBold.woff2') format('woff2'),
+        url('../../static/admin/fonts/Sniglet-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+
 .jumbotron {
     background: var(--bg-light);
 }
@@ -26,7 +42,7 @@ html, body {
 
 .navbar-primary .navbar-brand {
     color: var(--text-color);
-    font-weight: bolder;
+    font-family: 'Sniglet';
     font-size: 175%;
 }
 

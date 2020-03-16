@@ -1,3 +1,72 @@
-.navbar-total {
-    padding-bottom: 10%;
+:root {
+    --accent-color: #378FB3;
+    --bg-dark: #001B2A;
+    --text-color: #EDF5FF;
+    --bg-light: #134966;
+    --bg-accent: #FF5B79;
 }
+
+html, body {
+    background: var(--bg-dark);
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+@font-face {
+    font-family: 'Sniglet';
+    src: url('../../static/admin/fonts/Sniglet-Regular.woff2') format('woff2'),
+        url('../../static/admin/fonts/Sniglet-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Sniglet';
+    src: url('../../static/admin/fonts/Sniglet-ExtraBold.woff2') format('woff2'),
+        url('../../static/admin/fonts/Sniglet-ExtraBold.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+
+.jumbotron {
+    background: var(--bg-light);
+}
+
+.navbar {
+    width: 100%;
+}
+
+.navbar-primary {
+    background: var(--bg-accent);
+}
+
+.navbar-primary .navbar-brand {
+    color: var(--text-color);
+    font-family: 'Sniglet';
+    font-size: 175%;
+}
+
+.navbar-primary .nav-link {
+    color: var(--text-color);
+}
+
+.navbar-primary .navbar-nav > .active > a,
+.navbar-primary .navbar-nav > .active > a:focus,
+.navbar-primary .navbar-nav > .active > a:hover {
+    font-weight: bolder;
+}
+
+.page-default {
+    padding-top: 2%;
+}
+
+.rounded-bottom-corners {
+    /*-moz-border-radius: 8px;*/
+    /*-webkit-border-radius: 8px;*/
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+
+}
+

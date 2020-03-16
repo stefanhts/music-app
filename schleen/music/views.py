@@ -27,56 +27,92 @@ def user(request):
 
 def review(request):
     if request.method == 'POST':
+        # review_type: [enum] artist, album, song, or playlist
         review_type = ReviewType(int(request.POST['type']))
         review_text = request.POST['reviewText']
         review_date = date.today()
+        # review_score: points added or subtracted to review by community
         review_score = 1
+        # review_rating: reviewer's rating of subject out of 10
         review_rating = float(request.POST['rating'])
+        # review_subj_auth: artist for artist, album, song reviews; user for playlist reviewa
         review_subj_auth = request.POST['by']
+        # review_subj_container: album (only for song reviews)
+        review_subj_container = None
+        if review_type == ReviewType.SONG:
+            review_subj_container = request.POST['album']
+        # review_subj: song or album or playlist (N/A for artist reviews)
         review_subj = request.POST['subj']
         review_title = request.POST
         review_user = request.user
 
-        review = Reviews.objects.create(
+        review_base = Reviews.objects.create(
             name=review_title,
             text=review_text,
             date=review_date,
             rating=review_rating,
             score=review_score,
-            user=request.user,
+            user=review_user,
         )
 
         try:
-            review.save()
+            review_base.save()
         except Exception as ex:
             messages.info(request, ERROR_MESSAGE)
             handle_errors(ex)
 
-        review_obj = object
+        review_obj = None
 
-        # TODO create review and save to db
         if review_type == ReviewType.ALBUM or review_type == ReviewType.ARTIST or review_type == ReviewType.SONG:
-            artist = Artist.objects.filter(name=review_subj_auth).first()
+            # check if artist already exists in db
+            if Artist.objects.filter(name=review_subj_auth).count() > 0:
+                artist = Artist.objects.filter(name=review_subj_auth).first()
+            # if not, add it
+            else:
+                artist = Artist.objects.create(
+                    name=review_subj_auth
+                )
             if review_type == ReviewType.ALBUM:
-                album = Album.objects.filter(name=review_subj, artist=artist).first()
+                # check if album already exists in db
+                if Album.objects.filter(name=review_subj, artist=artist).count() > 0:
+                    album = Album.objects.filter(name=review_subj, artist=artist).first()
+                # if not, add it
+                else:
+                    album = Album.objects.create(
+                        name=review_subj,
+                        artist=artist
+                    )
                 review_obj = Album_Reviews.objects.create(
-                    review=review,
+                    review=review_base,
                     album=album,
                 )
             elif review_type == ReviewType.SONG:
-                album = Album.objects.filter(name=review_subj, artist=artist).first()
-                song = Song.object.create(
-                    name=review_subj,
-                    artist=artist,
-                    album=album
-                )
+                # check if album already exists in db
+                if Album.objects.filter(name=review_subj_container, artist=artist).count() > 0:
+                    album = Album.objects.filter(name=review_subj_container, artist=artist).first()
+                # if not, add it
+                else:
+                    album = Album.objects.create(
+                        name=review_subj_container,
+                        artist=artist
+                    )
+                # check if song already exists in db
+                if Song.objects.filter(name=review_subj, album=album, artist=artist).count() > 0:
+                    song = Song.objects.filter(name=review_subj, album=album, artist=artist).first()
+                # if not, add it
+                else:
+                    song = Song.objects.create(
+                        name=review_subj,
+                        artist=artist,
+                        album=album
+                    )
                 review_obj = Song_Reviews.objects.create(
-                    review=review,
+                    review=review_base,
                     song=song,
                 )
             else:
                 review_obj = Artist_Reviews.objects.create(
-                    review=review,
+                    review=review_base,
                     artist=artist
                 )
         else:
@@ -133,7 +169,7 @@ def topsongs(request):
         # TODO generalize this
         list = 'top 5'
 
-        # adds each artist,song, etc. and checks for duplicates/handles erros
+        # adds each artist,song, etc. and checks for duplicates/handles errors
         for i in range(len(artists)):
             cur_art = artists[i]
             cur_song = songnames[i]

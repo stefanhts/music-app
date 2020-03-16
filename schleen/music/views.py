@@ -102,7 +102,7 @@ def topsongs(request):
 
         # TODO don't add duplicates, and replace if they are on the same list
 
-        return redirect('/user')
+        return redirect('user')
 
     else:
         return render(request, 'topsongs.html')

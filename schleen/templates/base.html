@@ -2,21 +2,29 @@
 <html lang="en">
 <head>
     {% load static %}
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-primary">
     <a class="navbar-brand" href="/">schleen<span class="sr-only">(current)</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="/trending">trending<span class="sr-only">(current)</span></a>
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'trending' %}">trending<span class="sr-only">(current)</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'help' %}">help</a>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarLog">
+        <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'user' %}">{{ user.first_name }}</a>
@@ -32,19 +40,25 @@
                     <a class="nav-link" href="{% url 'register' %}">register</a>
                 </li>
             {% endif %}
-            <li class="nav-iten">
-                <a class="nav-link" href="/help">help</a>
-            </li>
         </ul>
     </div>
 </nav>
+<div class="row page-default">
+    <div class="col-md-8 mx-auto">
+        {% block content %}
 
-{% block content %}
-
-{% endblock %}
+        {% endblock %}
+    </div>
+</div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('li.active').removeClass('active');
+        $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
+    });
+</script>
 </body>
 </html>

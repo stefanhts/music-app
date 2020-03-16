@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <div class="page">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
@@ -24,7 +24,7 @@
         </nav>
 
         <div class="container container-fluid">
-            <div class="jumbotron">
+            <div class="jumbotron rounded-bottom-corners">
                 <h1 class="display-3">{{ user.first_name }}</h1>
                 <p class="lead">{{ user.first_name }}'s tastes: % current music themes popular to user... %</p>
                 <hr class="my-4">

@@ -60,6 +60,11 @@ html, body {
     padding-top: 2%;
 }
 
+.review-jumbo {
+    background-color: var(--text-color) !important;
+    color: var(--bg-dark) !important;
+}
+
 .rounded-bottom-corners {
     /*-moz-border-radius: 8px;*/
     /*-webkit-border-radius: 8px;*/
@@ -68,5 +73,11 @@ html, body {
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
 
+}
+
+.user-hr {
+    height: 5px;
+    border-top-width:1px;
+    border-color: var(--text-color);
 }
 

@@ -1,6 +1,47 @@
 {% extends 'user.html' %}
 {% block body %}
 
-user reviews
+    <div class="d-flex flex-column">
+{#        <div class="row">#}
+{#            <div class="col-md-4 ml-2">#}
+{#                <h4>my reviews:</h4>#}
+{#                <hr class="user-hr">#}
+{#            </div>#}
+{#        </div>#}
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                {% for rec in list %}
+                    <div class="col mx-auto">
+                        <div class="jumbotron review-jumbo">
+                            <div class="row">
+                                <div class="col-md-8 ml-2">
+                                    <span class="card-header-tabs">
+                                        {{ rec.title }}, a review of {{ rec.subject }}.
+                                        <br/>
+                                        <span class="rating">
+                                            {{ rec.rating }}/10
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mx-auto">
+                                    <div class="card-body">
+                                        {{ rec.text }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col ml-2">
+                                    <p/>
+                                    <a class="btn btn-secondary btn-sm float-right" href="{% url 'editreview' %}">edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

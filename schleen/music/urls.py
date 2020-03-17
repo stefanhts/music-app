@@ -10,5 +10,6 @@ urlpatterns = [
     path('reviews', views.user_reviews, name='reviews'),
     path('friends', views.friends, name='friends'),
     path('usersongs', views.user_songs, name='mysongs'),
-    path('review', views.review, name='review')
+    path('review', views.review, name='review'),
+    path('editreview', views.edit_review, name='editreview'),
 ]

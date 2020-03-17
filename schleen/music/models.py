@@ -8,6 +8,9 @@ class Artist(models.Model):
     # create artist model
     name = models.CharField(max_length=50, unique=True)
 
+    def get_name(self):
+        return self.name
+
 
 class Album(models.Model):
     # create album model
@@ -18,6 +21,12 @@ class Album(models.Model):
         on_delete=models.CASCADE,
         null=True
     )
+
+    def get_name(self):
+        return self.name
+
+    def get_artist(self):
+        return self.artist
 
     class Meta:
         # disallow song artist repeats
@@ -37,6 +46,9 @@ class Songs_list(models.Model):
     )
 
     name = models.CharField(max_length=100)
+
+    def get_name(self):
+        return self.name
 
 
 class Song(models.Model):
@@ -61,6 +73,15 @@ class Song(models.Model):
         Songs_list,
         related_name='song'
     )
+
+    def get_name(self):
+        return self.name
+
+    def get_artist(self):
+        return self.artist
+
+    def get_album(self):
+        return self.album
 
     class Meta:
         # disallow song-artist-combo repeats
@@ -106,6 +127,24 @@ class Reviews(models.Model):
         related_name='written_by'
     )
 
+    def get_name(self):
+        return self.name
+
+    def get_text(self):
+        return self.text
+
+    def get_date(self):
+        return self.date
+
+    def get_rating(self):
+        return self.rating
+
+    def get_score(self):
+        return self.score
+
+    def get_username(self):
+        return self.user.username
+
 
 class Album_Reviews(models.Model):
     review = models.ForeignKey(
@@ -117,6 +156,12 @@ class Album_Reviews(models.Model):
         Album,
         on_delete=models.CASCADE,
     )
+
+    def get_review(self):
+        return self.review
+
+    def get_album(self):
+        return self.album
 
     class Meta:
         unique_together = [
@@ -160,7 +205,6 @@ class Song_Reviews(models.Model):
             'review'
         ]
 
-
 # class Playlist_Reviews(models.Model):
 #     review = models.ForeignKey(
 #         Reviews,
@@ -171,4 +215,3 @@ class Song_Reviews(models.Model):
 #         Songs_list,
 #         on_delete=models.CASCADE,
 #     )
-

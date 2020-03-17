@@ -15,7 +15,7 @@ html, body {
 @font-face {
     font-family: 'Sniglet';
     src: url('../../static/admin/fonts/Sniglet-Regular.woff2') format('woff2'),
-        url('../../static/admin/fonts/Sniglet-Regular.woff') format('woff');
+    url('../../static/admin/fonts/Sniglet-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -23,7 +23,7 @@ html, body {
 @font-face {
     font-family: 'Sniglet';
     src: url('../../static/admin/fonts/Sniglet-ExtraBold.woff2') format('woff2'),
-        url('../../static/admin/fonts/Sniglet-ExtraBold.woff') format('woff');
+    url('../../static/admin/fonts/Sniglet-ExtraBold.woff') format('woff');
     font-weight: 800;
     font-style: normal;
 }
@@ -58,6 +58,19 @@ html, body {
 
 .page-default {
     padding-top: 2%;
+}
+
+.page-head {
+    font-style: italic;
+}
+
+.rating {
+    color: orange;
+}
+
+.review-jumbo {
+    background-color: var(--text-color);
+    color: var(--bg-dark);
 }
 
 .rounded-bottom-corners {

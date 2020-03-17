@@ -127,7 +127,7 @@ def review(request):
         return redirect('review')
 
     else:
-        return render(request,'user.html')
+        return render(request,'createreview.html')
 
 
 def user_reviews(request):

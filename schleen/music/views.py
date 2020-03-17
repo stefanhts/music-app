@@ -10,6 +10,7 @@ from datetime import date
 ERROR_MESSAGE = 'Uh oh, something went wrong... We\'ll get right on it'
 REVIEW_TYPE = {'s': 'Song', 'ar': 'Artist', 'al': 'Album', 'p': 'Playlist'}
 
+
 def home(request):
     return render(request, 'home.html')
 
@@ -20,7 +21,7 @@ def user(request):
     list = []
     for e in lists:
         list.append(
-            song_obj(Song.objects.filter(id=e.id).first().name, Song.objects.filter(id=e.id).first().artist.name))
+            SongObj(Song.objects.filter(id=e.id).first().name, Song.objects.filter(id=e.id).first().artist.name))
 
     return render(request, 'usersongs.html', {'list': list})
 
@@ -127,19 +128,81 @@ def review(request):
         return redirect('review')
 
     else:
-        return render(request,'createreview.html')
+        return render(request, 'createreview.html')
 
 
 def user_reviews(request):
-    return render(request,'userreviews.html',{'list':''})
+    reviews = Reviews.objects.filter(user=request.user).order_by('date')[::-1]
+
+    review_list = []
+    for r in reviews:
+        r_type = r.review_type
+        if r_type == 'SO':
+            review_temp = Song_Reviews.objects.filter(review=r).first()
+            song = Song.objects.filter(id=review_temp.song_id).first()
+            subj = '{0} by {1} from the album {2}'.format(
+                song.name,
+                Artist.objects.filter(id=song.artist_id).name,
+                Album.objects.filter(id=song.album_id).name,
+            )
+
+            review_list.append(
+                PrintableReview(
+                    subject=subj,
+                    title=r.name,
+                    rating=r.rating,
+                    score=r.score,
+                    date=r.date,
+                    text=r.text,
+                )
+            )
+        elif r_type == 'AL':
+            review_temp = Album_Reviews.objects.filter(review=r).first()
+            album = Album.objects.filter(id=review_temp.album_id).first()
+            subj = '{0} by {1}'.format(
+                album.name,
+                Artist.objects.filter(id=album.artist_id).name,
+            )
+            review_list.append(
+                PrintableReview(
+                    subject=subj,
+                    title=r.name,
+                    rating=r.rating,
+                    score=r.score,
+                    date=r.date,
+                    text=r.text,
+                )
+            )
+        elif r_type == 'AR':
+            review_temp = Artist_Reviews.objects.filter(review=r).first()
+            artist = Artist.objects.filter(id=review_temp.artist_id).first()
+            subj = artist.name
+            review_list.append(
+                PrintableReview(
+                    subject=subj,
+                    title=r.name,
+                    rating=r.rating,
+                    score=r.score,
+                    date=r.date,
+                    text=r.text,
+                )
+            )
+        else:
+            # review_list.append(
+            #     Playlist_Reviews.objects.filter(review=r)
+            # )
+            pass
+
+    return render(request, 'userreviews.html', {'list': ''})
 
 
 def user_songs(request):
-    return render(request,'usersongs.html',{'list':''})
+    return render(request, 'usersongs.html', {'list': ''})
 
 
 def friends(request):
-    return render(request,'userfriends.html',{'list':''})
+    return render(request, 'userfriends.html', {'list': ''})
+
 
 def topsongs(request):
     # TODO This should be generalized for creating any type of list. We don't want duplicate songs in our db
@@ -238,10 +301,27 @@ def handle_errors(ex):
     pass
 
 
-class song_obj:
+class SongObj:
     title = str
     artist = str
 
     def __init__(self, title, artist):
         self.title = title
         self.artist = artist
+
+
+class PrintableReview:
+    subject = str
+    title = str
+    rating = float
+    score = int
+    date = str
+    text = str
+
+    def __init__(self, subject, title, rating, score, date, text):
+        self.subject = subject
+        self.title = title
+        self.rating = rating
+        self.score = score
+        self.date = date
+        self.text = text

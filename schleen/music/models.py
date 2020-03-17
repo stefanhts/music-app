@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from enum import Enum
 from django.utils import timezone
 
 
@@ -71,6 +72,24 @@ class Song(models.Model):
 
 
 class Reviews(models.Model):
+    Al = 'al'
+    Ar = 'ar'
+    So = 'so'
+    Pl = 'pl'
+
+    REVIEW_TYPE_OPTIONS = (
+        (Al, 'AL'),
+        (Ar, 'AR'),
+        (So, 'SO'),
+        (Pl, 'PL'),
+    )
+
+    review_type = models.CharField(
+        max_length=2,
+        choices=REVIEW_TYPE_OPTIONS,
+        default=Al,
+    )
+
     name = models.CharField(max_length=80)
 
     text = models.TextField()

@@ -8,7 +8,7 @@ from datetime import date
 # TODO disalow empty fields and duplicate songs
 
 ERROR_MESSAGE = 'Uh oh, something went wrong... We\'ll get right on it'
-
+REVIEW_TYPE = {'s': 'Song', 'ar': 'Artist', 'al': 'Album', 'p': 'Playlist'}
 
 def home(request):
     return render(request, 'home.html')
@@ -27,20 +27,20 @@ def user(request):
 
 def review(request):
     if request.method == 'POST':
-        # review_type: [enum] artist, album, song, or playlist
-        review_type = ReviewType(int(request.POST['type']))
-        review_text = request.POST['reviewText']
+        # review_type: artist, album, song, or playlist
+        review_type = request.POST['review-type']
+        review_text = request.POST['review-text']
         review_date = date.today()
         # review_score: points added or subtracted to review by community
         review_score = 1
         # review_rating: reviewer's rating of subject out of 10
         review_rating = float(request.POST['rating'])
         # review_subj_auth: artist for artist, album, song reviews; user for playlist reviewa
-        review_subj_auth = request.POST['by']
+        review_subj_auth = request.POST['subj-auth']
         # review_subj_container: album (only for song reviews)
         review_subj_container = None
-        if review_type == ReviewType.SONG:
-            review_subj_container = request.POST['album']
+        if review_type == REVIEW_TYPE['s']:
+            review_subj_container = request.POST['subj-container']
         # review_subj: song or album or playlist (N/A for artist reviews)
         review_subj = request.POST['subj']
         review_title = request.POST
@@ -63,7 +63,7 @@ def review(request):
 
         review_obj = None
 
-        if review_type == ReviewType.ALBUM or review_type == ReviewType.ARTIST or review_type == ReviewType.SONG:
+        if review_type != REVIEW_TYPE['p']:
             # check if artist already exists in db
             if Artist.objects.filter(name=review_subj_auth).count() > 0:
                 artist = Artist.objects.filter(name=review_subj_auth).first()
@@ -72,7 +72,7 @@ def review(request):
                 artist = Artist.objects.create(
                     name=review_subj_auth
                 )
-            if review_type == ReviewType.ALBUM:
+            if review_type == REVIEW_TYPE['al']:
                 # check if album already exists in db
                 if Album.objects.filter(name=review_subj, artist=artist).count() > 0:
                     album = Album.objects.filter(name=review_subj, artist=artist).first()
@@ -86,7 +86,7 @@ def review(request):
                     review=review_base,
                     album=album,
                 )
-            elif review_type == ReviewType.SONG:
+            elif review_type == REVIEW_TYPE['s']:
                 # check if album already exists in db
                 if Album.objects.filter(name=review_subj_container, artist=artist).count() > 0:
                     album = Album.objects.filter(name=review_subj_container, artist=artist).first()
@@ -236,13 +236,6 @@ def help(request):
 def handle_errors(ex):
     # TODO handle errors, possibly send an email to dev team
     pass
-
-
-class ReviewType(Enum):
-    ALBUM = 1
-    SONG = 2
-    PLAYLIST = 3
-    ARTIST = 4
 
 
 class song_obj:

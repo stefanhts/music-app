@@ -23,7 +23,8 @@ def user(request):
         print(type(e))
         # print(getattr(e.song,'song_id'))
         list.append(
-            SongObj(Song.objects.filter(id=e.id).first().get_name(), Song.objects.filter(id=e.id).first().get_artist().get_name()))
+            SongObj(Song.objects.filter(id=e.id).first().get_name(),
+                    Song.objects.filter(id=e.id).first().get_artist().get_name()))
 
     return render(request, 'usersongs.html', {'list': list})
 
@@ -34,6 +35,7 @@ def review(request):
         review_type = request.POST['review-type']
         review_text = request.POST['review-text']
         review_date = date.today()
+        date_modified=date.today()
         # review_score: points added or subtracted to review by community
         review_score = 1
         # review_rating: reviewer's rating of subject out of 10
@@ -57,8 +59,8 @@ def review(request):
             rating=review_rating,
             score=review_score,
             user=review_user,
+            date_modified=date_modified
         )
-
         try:
             review_base.save()
         except Exception as ex:
@@ -136,6 +138,79 @@ def review(request):
 
 
 def edit_review(request):
+    if request.method == 'GET':
+        review_id = request.GET['revid']
+        review = Reviews.objects.filter(id=review_id).first()
+        subj=review.name
+        title = review.name
+        text=review.text
+        subj_auth=''
+        subj_cont=''
+        username=request.user.username
+        date_p=review.date
+        date_modified=review.date_modified
+        rating=review.rating
+        score=review.score
+        subject=subj
+
+        review_type = review.review_type
+        if review_type == 'al':
+            review = Album_Reviews.objects.filter(review_id=review.id).first()
+            subj=review.album.name
+            subj_auth=review.album.artist.name
+            subj_cont=''
+            subject='{0} by {1}'.format(subj, subj_auth)
+        elif review_type == 'so':
+            review = Song_Reviews.objects.filter(review_id=review.id).first()
+            subj=review.song.name
+            subj_auth=review.song.artist.name
+            subj_cont=review.song.album.name
+            subject = '{0} by {1} from the album {2}'.format(subj,subj_auth,subj_cont)
+        elif review_type == 'ar':
+            review=Artist_Reviews.objects.filter(review_id=review.id).first()
+            subj=review.artist.name
+            subj_cont=''
+            subj_auth=''
+            subject=subj
+            '{0} by {1}'.format(subj,subj_auth)
+        elif review_type == 'pl':
+            pass
+        else:
+            pass
+        printable = PrintableReview(
+            review_id=review_id,
+            subject=subject,
+            subj=subj,
+            subj_auth=subj_auth,
+            title=title,
+            text=text,
+            date=date_p,
+            username=username,
+            score=score,
+            rating=rating,
+            date_modified=date_modified,
+            subj_cont=subj_cont
+        )
+        return render(request,'editreview.html',{'rev':printable})
+    if request.method == 'POST':
+        review_id = request.POST['revid']
+        title = request.POST['review-title']
+        text = request.POST['review-text']
+        rating = request.POST['rating']
+
+        review = Reviews.objects.filter(id=review_id).first()
+        review.name = title
+        review.text = text
+        review.date_modified = date.today()
+        review.rating = rating
+
+        review.save()
+
+        return redirect('reviews')
+    else:
+
+        return render(request, 'editreview.html', {'rev': rev})
+
     return redirect('review')
 
 
@@ -144,6 +219,7 @@ def user_reviews(request):
     print(reviews)
     review_list = []
     for r in reviews:
+        review_id = r.id
         print(r.review_type)
         r_type = r.review_type
         if r_type == 'so':
@@ -152,17 +228,21 @@ def user_reviews(request):
             subj = '{0} by {1} from the album {2}'.format(
                 song.name,
                 Artist.objects.filter(id=song.artist_id).name,
-                Album.objects.filter(id=song.album_id).name,
+                Album.objects.filter(id=song.get_album().id).name,
             )
 
             review_list.append(
                 PrintableReview(
+                    review_id=review_id,
                     subject=subj,
                     title=r.name,
                     rating=r.rating,
                     score=r.score,
                     date=r.date,
                     text=r.text,
+                    subj=song.get_name(),
+                    subj_cont=Album.objects.filter(id=song.get_album().id).name,
+                    subj_auth=Artist.objects.filter(id=song.get_artist().id).name,
                     username=request.user.username
                 )
             )
@@ -177,13 +257,18 @@ def user_reviews(request):
             )
             review_list.append(
                 PrintableReview(
+                    review_id=review_id,
                     subject=subj,
                     title=r.get_name(),
                     rating=r.get_rating(),
                     score=r.get_score(),
                     date=r.get_date(),
                     text=r.get_text(),
-                    username=request.user.username
+                    subj=album,
+                    subj_auth=review_temp.get_album().get_artist().get_name(),
+                    subj_cont='',
+                    username=request.user.username,
+                    date_modified=date.today()
                 )
             )
         elif r_type == 'ar':
@@ -192,6 +277,10 @@ def user_reviews(request):
             subj = artist.name
             review_list.append(
                 PrintableReview(
+                    review_id=review_id,
+                    subj=subj,
+                    subj_cont='',
+                    subj_auth='',
                     subject=subj,
                     title=r.name,
                     rating=r.rating,
@@ -211,7 +300,17 @@ def user_reviews(request):
 
 
 def user_songs(request):
-    return render(request, 'usersongs.html', {'list': ''})
+    lists = Songs_list.objects.filter(user=request.user, name='top 5').order_by('-id')[:5][::-1]
+    list = []
+    for e in lists:
+        print(e.id)
+        print(type(e))
+        # print(getattr(e.song,'song_id'))
+        list.append(
+            SongObj(Song.objects.filter(id=e.id).first().get_name(),
+                    Song.objects.filter(id=e.id).first().get_artist().get_name()))
+
+    return render(request, 'usersongs.html', {'list': list})
 
 
 def friends(request):
@@ -248,7 +347,7 @@ def topsongs(request):
 
         # adds each artist,song, etc. and checks for duplicates/handles errors
         for i in range(len(artists)):
-            if (artist[i] != '' and artist[i] != None) and (songnames[i] != '' and songnames[i] != None):
+            if (artists[i] != '' and artists[i] != None) and (songnames[i] != '' and songnames[i] != None):
                 cur_art = artists[i]
                 cur_song = songnames[i]
                 if Artist.objects.filter(name=cur_art).first() == None:
@@ -305,6 +404,7 @@ class SongObj:
 
 
 class PrintableReview:
+    review_id = int
     subject = str
     title = str
     rating = float
@@ -312,8 +412,13 @@ class PrintableReview:
     date = str
     text = str
     username = str
+    subj = str
+    subj_auth = str
+    subj_cont = str
+    date_modified = str
 
-    def __init__(self, subject, title, rating, score, date, text, username):
+    def __init__(self, review_id, subject, title, rating, score, date, text, username, subj, subj_auth, subj_cont, date_modified):
+        self.review_id = review_id
         self.subject = subject
         self.title = title
         self.rating = rating
@@ -321,3 +426,7 @@ class PrintableReview:
         self.date = date
         self.text = text
         self.username = username
+        self.subj = subj
+        self.subj_auth = subj_auth
+        self.subj_cont = subj_cont
+        self.date_modified = date_modified

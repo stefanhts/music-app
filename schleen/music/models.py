@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 from enum import Enum
 from django.utils import timezone
 
@@ -116,6 +117,8 @@ class Reviews(models.Model):
     text = models.TextField()
 
     date = models.DateField()
+
+    date_modified=models.DateField()
 
     rating = models.FloatField()
 

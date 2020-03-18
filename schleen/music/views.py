@@ -23,7 +23,8 @@ def user(request):
         print(type(e))
         # print(getattr(e.song,'song_id'))
         list.append(
-            SongObj(Song.objects.filter(id=e.id).first().get_name(), Song.objects.filter(id=e.id).first().get_artist().get_name()))
+            SongObj(Song.objects.filter(id=e.id).first().get_name(),
+                    Song.objects.filter(id=e.id).first().get_artist().get_name()))
 
     return render(request, 'usersongs.html', {'list': list})
 
@@ -32,6 +33,7 @@ def review(request):
     if request.method == 'POST':
         # review_type: artist, album, song, or playlist
         review_type = request.POST['review-type']
+        print("review type: {0}\nreview type == \'s\': {1}".format(review_type, review_type == REVIEW_TYPE['s']))
         review_text = request.POST['review-text']
         review_date = date.today()
         # review_score: points added or subtracted to review by community
@@ -59,24 +61,30 @@ def review(request):
             user=review_user,
         )
 
-        try:
-            review_base.save()
-        except Exception as ex:
-            messages.info(request, ERROR_MESSAGE)
-            handle_errors(ex)
-
         review_obj = None
 
         if review_type != REVIEW_TYPE['p']:
-            # check if artist already exists in db
-            if Artist.objects.filter(name=review_subj_auth).count() > 0:
-                artist = Artist.objects.filter(name=review_subj_auth).first()
-            # if not, add it
+            if review_type != REVIEW_TYPE['ar']:
+                # check if artist already exists in db
+                if Artist.objects.filter(name=review_subj_auth).count() > 0:
+                    artist = Artist.objects.filter(name=review_subj_auth).first()
+                # if not, add it
+                else:
+                    artist = Artist.objects.create(
+                        name=review_subj_auth
+                    )
             else:
-                artist = Artist.objects.create(
-                    name=review_subj_auth
-                )
+                # check if artist already exists in db
+                if Artist.objects.filter(name=review_subj).count() > 0:
+                    artist = Artist.objects.filter(name=review_subj).first()
+                # if not, add it
+                else:
+                    artist = Artist.objects.create(
+                        name=review_subj
+                    )
             if review_type == REVIEW_TYPE['al']:
+                review_base.review_type = 'al'
+                review_base.save()
                 # check if album already exists in db
                 if Album.objects.filter(name=review_subj, artist=artist).count() > 0:
                     album = Album.objects.filter(name=review_subj, artist=artist).first()
@@ -91,6 +99,8 @@ def review(request):
                     album=album,
                 )
             elif review_type == REVIEW_TYPE['s']:
+                review_base.review_type = 'so'
+                review_base.save()
                 # check if album already exists in db
                 if Album.objects.filter(name=review_subj_container, artist=artist).count() > 0:
                     album = Album.objects.filter(name=review_subj_container, artist=artist).first()
@@ -115,6 +125,9 @@ def review(request):
                     song=song,
                 )
             else:
+
+                review_base.review_type = 'ar'
+                review_base.save()
                 review_obj = Artist_Reviews.objects.create(
                     review=review_base,
                     artist=artist
@@ -123,12 +136,8 @@ def review(request):
             # TODO implement playlist reviews
             pass
 
-        try:
-            review_obj.save()
-        except Exception as ex:
-            messages.info(request, ERROR_MESSAGE)
-            print(ex)
-            handle_errors(ex)
+        review_obj.save()
+
         return redirect('reviews')
 
     else:
@@ -142,17 +151,21 @@ def edit_review(request):
 def user_reviews(request):
     reviews = Reviews.objects.filter(user=request.user).order_by('date')[::-1]
     print(reviews)
+    for i in reviews:
+        print(i)
     review_list = []
     for r in reviews:
         print(r.review_type)
         r_type = r.review_type
-        if r_type == 'so':
+        if r is None:
+            pass
+        elif r_type == 'so':
             review_temp = Song_Reviews.objects.filter(review=r).first()
             song = Song.objects.filter(id=review_temp.song_id).first()
             subj = '{0} by {1} from the album {2}'.format(
                 song.name,
-                Artist.objects.filter(id=song.artist_id).name,
-                Album.objects.filter(id=song.album_id).name,
+                Artist.objects.filter(id=song.artist_id).first().name,
+                Album.objects.filter(id=song.album_id).first().name,
             )
 
             review_list.append(
@@ -167,9 +180,10 @@ def user_reviews(request):
                 )
             )
         elif r_type == 'al':
-            review_temp = Album_Reviews()
+            # review_temp = Album_Reviews()
             review_temp = Album_Reviews.objects.filter(review=r).first()
-            print('this works:', review_temp.get_album().get_name())
+            print(review_temp)
+            # print('this works:', review_temp.get_album().get_name())
             album = review_temp.get_album().get_name()
             subj = '{0} by {1}'.format(
                 album,
@@ -188,8 +202,10 @@ def user_reviews(request):
             )
         elif r_type == 'ar':
             review_temp = Artist_Reviews.objects.filter(review=r).first()
-            artist = Artist.objects.filter(id=review_temp.artist_id).first()
-            subj = artist.name
+            artist = review_temp.artist.name
+            print('=====================================')
+            print(artist)
+            subj = artist
             review_list.append(
                 PrintableReview(
                     subject=subj,
@@ -248,7 +264,7 @@ def topsongs(request):
 
         # adds each artist,song, etc. and checks for duplicates/handles errors
         for i in range(len(artists)):
-            if (artist[i] != '' and artist[i] != None) and (songnames[i] != '' and songnames[i] != None):
+            if (artists[i] != '' and artists[i] != None) and (songnames[i] != '' and songnames[i] != None):
                 cur_art = artists[i]
                 cur_song = songnames[i]
                 if Artist.objects.filter(name=cur_art).first() == None:

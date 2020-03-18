@@ -181,6 +181,12 @@ class Artist_Reviews(models.Model):
         on_delete=models.CASCADE,
     )
 
+    def get_review(self):
+        return self.review
+
+    def get_artist(self):
+        return self.artist
+
     class Meta:
         unique_together = [
             'artist',
@@ -198,6 +204,12 @@ class Song_Reviews(models.Model):
         Song,
         on_delete=models.CASCADE,
     )
+
+    def get_review(self):
+        return self.review
+
+    def get_album(self):
+        return self.song
 
     class Meta:
         unique_together = [

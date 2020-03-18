@@ -22,8 +22,7 @@
                         <label for="subject-auth" id="subj-auth-label">
                             Artist:
                         </label>
-                        <input type="text" class="form-control" name="subj-auth" id="subject-auth"
-                               placeholder="bob the builder">{{rev.artist}}</input>
+                        <input type="text" class="form-control" name="subj-auth" id="subject-auth" value="{{rev.subj_auth}}">
                     </div>
                 </div>
                 <div class="col" id="subj-cont-col">
@@ -31,8 +30,7 @@
                         <label for="subject-container">
                             Album:
                         </label>
-                        <input type="text" class="form-control" name="subj-container" id="subject-container"
-                               placeholder="bob's greatest hits">
+                        <input type="text" class="form-control" name="subj-container" id="subject-container" value="{{ rev.subj_cont }}">
                     </div>
                 </div>
                 <div class="col">
@@ -41,7 +39,7 @@
                             Album:
                         </label>
                         <input type="text" class="form-control" name="subj" id="subject"
-                               placeholder="Happy Birthday">
+                               value="subj">
                     </div>
                 </div>
             </div>
@@ -52,7 +50,7 @@
                             Title:
                         </label>
                         <input type="text" class="form-control" name="review-title" id="title"
-                               placeholder="my dope review...">
+                               value="{{ rev.title }}">
                     </div>
                 </div>
                 <div class="col-md-2">
@@ -60,7 +58,7 @@
                         <label for="rat">
                             Rating:
                         </label>
-                        <input type="number" class="form-control col-md-6" step="0.5" name="rating" id="rat" value="10"
+                        <input type="number" class="form-control col-md-6" step="0.5" name="rating" id="rat" value="{{rev.rating}}"
                                min="0" max="10">
                     </div>
                 </div>
@@ -72,11 +70,12 @@
                             Review:
                         </label>
                         <textarea class="form-control" name="review-text" id="text"
-                                  placeholder="your review goes here..." rows="12" cols="120"></textarea>
+                                   rows="12" cols="120">{{ rev.text }}</textarea>
                     </div>
+                    <input name="revid" hidden="true" value="{{ rev.review_id }}">
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Publish</button>
+            <button type="submit" class="btn btn-primary">save</button>
         </div>
     </form>
     <script type="text/javascript">

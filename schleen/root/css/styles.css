@@ -15,7 +15,7 @@ html, body {
 @font-face {
     font-family: 'Sniglet';
     src: url('../../static/admin/fonts/Sniglet-Regular.woff2') format('woff2'),
-        url('../../static/admin/fonts/Sniglet-Regular.woff') format('woff');
+    url('../../static/admin/fonts/Sniglet-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -23,7 +23,7 @@ html, body {
 @font-face {
     font-family: 'Sniglet';
     src: url('../../static/admin/fonts/Sniglet-ExtraBold.woff2') format('woff2'),
-        url('../../static/admin/fonts/Sniglet-ExtraBold.woff') format('woff');
+    url('../../static/admin/fonts/Sniglet-ExtraBold.woff') format('woff');
     font-weight: 800;
     font-style: normal;
 }
@@ -60,14 +60,34 @@ html, body {
     padding-top: 2%;
 }
 
+.page-head {
+    font-style: italic;
+}
+
+.rating {
+    color: orange;
+}
+
 .review-jumbo {
-    background-color: var(--text-color) !important;
-    color: var(--bg-dark) !important;
+    background-color: var(--text-color);
+    color: var(--bg-dark);
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.review-text-jumbo {
+    background-color: #e4ecf5;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.review-title {
+    padding-top: 10px;
 }
 
 .rounded-bottom-corners {
-    /*-moz-border-radius: 8px;*/
-    /*-webkit-border-radius: 8px;*/
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-bottom-left-radius: 8px;
@@ -75,9 +95,7 @@ html, body {
 
 }
 
-.user-hr {
-    height: 5px;
-    border-top-width:1px;
-    border-color: var(--text-color);
+.score-format {
+    padding-top: 10%;
+    font-weight: bolder;
 }
-

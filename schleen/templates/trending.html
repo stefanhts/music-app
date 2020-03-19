@@ -1,12 +1,80 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container-lg">
-        <div class="content">
-            <div class="jumbotron-fluid">
-                <p>
-                    This is trending
-                </p>
+    <div class="jumbotron">
+        <div class="d-flex flex-column">
+            <div class="row">
+                <div class="col-md-12 mx-auto">
+                    {% for rec in list %}
+                        <div class="col mx-auto">
+                            <div class="review-jumbo rounded">
+                                <div class="row review-title">
+                                    <div class="col-sm-10 ml-2">
+                                        <span id="id" hidden="true">{{ rec.review_id }}</span>
+                                        <div class="review-title col-lg-12">
+                                            <div class="cm-header" style="font-size: 20pt;">{{ rec.title }}</div>
+                                            <i>a review of {{ rec.subject }}.</i>
+                                            <div class="rating">
+                                                <span class="rate">{{ rec.rating }}</span>/10.0
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col ml-5">
+                                        <div class="row justify-content-center">
+                                            <p/>
+                                            <form action="upvote" method="POST">
+                                                {% csrf_token %}
+                                                <input hidden="true" name="revid" value="{{ rec.review_id }}">
+                                                <button class="btn btn-secondary btn-sm float-right" type="submit">
+                                                    /\
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            {{ rec.score }}
+                                        </div>
+                                        <div class="row justify-content-center">
+                                            <p/>
+                                            <form action="downvote" method="POST">
+                                                {% csrf_token %}
+                                                <input hidden="true" name="revid" value="{{ rec.review_id }}">
+                                                <button class="btn btn-secondary btn-sm float-right" type="submit">
+                                                    \/
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-sm-11 mx-auto review-text-jumbo rounded">
+                                        <div class="card-body">
+                                            {{ rec.text }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.rating').each(function (i, obj) {
+                var rating = parseFloat($(this).text())
+                var color = 'green';
+                if (rating <= 3.5) {
+                    color = 'red';
+                } else {
+                    if (rating < 7) {
+                        color = '#deb900';
+                    }
+                }
+                $(this).css('color', color);
+            })
+        })
+    </script>
 {% endblock %}

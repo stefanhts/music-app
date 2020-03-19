@@ -32,10 +32,6 @@ html, body {
     background: var(--bg-light);
 }
 
-multi-review {
-    padding-top: 10%;
-}
-
 .navbar {
     width: 100%;
 }
@@ -99,3 +95,7 @@ multi-review {
 
 }
 
+.score-format {
+    padding-top: 10%;
+    font-weight: bolder;
+}

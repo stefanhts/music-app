@@ -36,7 +36,7 @@ def review(request):
         print("review type: {0}\nreview type == \'s\': {1}".format(review_type, review_type == REVIEW_TYPE['s']))
         review_text = request.POST['review-text']
         review_date = date.today()
-        date_modified=date.today()
+        date_modified = date.today()
         # review_score: points added or subtracted to review by community
         review_score = 1
         # review_rating: reviewer's rating of subject out of 10
@@ -140,48 +140,48 @@ def review(request):
 
         review_obj.save()
 
-        return redirect('reviews')
+        return redirect('myreviews')
 
     else:
         return render(request, 'createreview.html')
 
 
 def edit_review(request):
-    if request.method == 'GET':
+    if request.method == 'GET' and 'revid' in request.GET:
         review_id = request.GET['revid']
         review = Reviews.objects.filter(id=review_id).first()
-        subj=review.name
+        subj = review.name
         title = review.name
-        text=review.text
-        subj_auth=''
-        subj_cont=''
-        username=request.user.username
-        date_p=review.date
-        date_modified=review.date_modified
-        rating=review.rating
-        score=review.score
-        subject=subj
+        text = review.text
+        subj_auth = ''
+        subj_cont = ''
+        username = request.user.username
+        date_p = review.date
+        date_modified = review.date_modified
+        rating = review.rating
+        score = review.score
+        subject = subj
 
         review_type = review.review_type
         if review_type == 'al':
             review = Album_Reviews.objects.filter(review_id=review.id).first()
-            subj=review.album.name
-            subj_auth=review.album.artist.name
-            subj_cont=''
-            subject='{0} by {1}'.format(subj, subj_auth)
+            subj = review.album.name
+            subj_auth = review.album.artist.name
+            subj_cont = ''
+            subject = '{0} by {1}'.format(subj, subj_auth)
         elif review_type == 'so':
             review = Song_Reviews.objects.filter(review_id=review.id).first()
-            subj=review.song.name
-            subj_auth=review.song.artist.name
-            subj_cont=review.song.album.name
-            subject = '{0} by {1} from the album {2}'.format(subj,subj_auth,subj_cont)
+            subj = review.song.name
+            subj_auth = review.song.artist.name
+            subj_cont = review.song.album.name
+            subject = '{0} by {1} from the album {2}'.format(subj, subj_auth, subj_cont)
         elif review_type == 'ar':
-            review=Artist_Reviews.objects.filter(review_id=review.id).first()
-            subj=review.artist.name
-            subj_cont=''
-            subj_auth=''
-            subject=subj
-            '{0} by {1}'.format(subj,subj_auth)
+            review = Artist_Reviews.objects.filter(review_id=review.id).first()
+            subj = review.artist.name
+            subj_cont = ''
+            subj_auth = ''
+            subject = subj
+            '{0} by {1}'.format(subj, subj_auth)
         elif review_type == 'pl':
             pass
         else:
@@ -200,7 +200,7 @@ def edit_review(request):
             date_modified=date_modified,
             subj_cont=subj_cont
         )
-        return render(request,'editreview.html',{'rev':printable})
+        return render(request, 'editreview.html', {'rev': printable})
     if request.method == 'POST':
         review_id = request.POST['revid']
         title = request.POST['review-title']
@@ -215,23 +215,20 @@ def edit_review(request):
 
         review.save()
 
-        return redirect('reviews')
-    else:
-
-        return render(request, 'editreview.html', {'rev': rev})
+        return redirect('myreviews')
 
     return redirect('review')
 
 
-def user_reviews(request):
-    reviews = Reviews.objects.filter(user=request.user).order_by('date')[::-1]
-    print(reviews)
-    for i in reviews:
-        print(i)
+def generate_review_list(request, display_type):
+    if display_type == 'user':
+        reviews = Reviews.objects.filter(user=request.user).order_by('date')[::-1]
+    else:
+        reviews = Reviews.objects.all().order_by('date')[::-1]
     review_list = []
     for r in reviews:
         review_id = r.id
-        print(r.review_type)
+        # print(r.review_type)
         r_type = r.review_type
         if r is None:
             pass
@@ -256,13 +253,14 @@ def user_reviews(request):
                     subj=song.get_name(),
                     subj_cont=Album.objects.filter(id=song.get_album().id).name,
                     subj_auth=Artist.objects.filter(id=song.get_artist().id).name,
-                    username=request.user.username
+                    username=request.user.username,
+                    date_modified=date.today()
                 )
             )
         elif r_type == 'al':
             # review_temp = Album_Reviews()
             review_temp = Album_Reviews.objects.filter(review=r).first()
-            print(review_temp)
+            # print(review_temp)
             # print('this works:', review_temp.get_album().get_name())
             album = review_temp.get_album().get_name()
             subj = '{0} by {1}'.format(
@@ -288,8 +286,8 @@ def user_reviews(request):
         elif r_type == 'ar':
             review_temp = Artist_Reviews.objects.filter(review=r).first()
             artist = review_temp.artist.name
-            print('=====================================')
-            print(artist)
+            # print('=====================================')
+            # print(artist)
             subj = artist
             review_list.append(
                 PrintableReview(
@@ -303,15 +301,22 @@ def user_reviews(request):
                     score=r.score,
                     date=r.date,
                     text=r.text,
-                    username=request.user.username
+                    username=request.user.username,
+                    date_modified=date.today()
                 )
             )
         else:
+            # TODO playlist reviews
             # review_list.append(
             #     Playlist_Reviews.objects.filter(review=r)
             # )
             pass
-    print(len(reviews))
+    # print(len(reviews))
+    return review_list
+
+
+def user_reviews(request):
+    review_list = generate_review_list(request, 'user')
     return render(request, 'userreviews.html', {'list': review_list})
 
 
@@ -319,8 +324,8 @@ def user_songs(request):
     lists = Songs_list.objects.filter(user=request.user, name='top 5').order_by('-id')[:5][::-1]
     list = []
     for e in lists:
-        print(e.id)
-        print(type(e))
+        # print(e.id)
+        # print(type(e))
         # print(getattr(e.song,'song_id'))
         list.append(
             SongObj(Song.objects.filter(id=e.id).first().get_name(),
@@ -433,7 +438,8 @@ class PrintableReview:
     subj_cont = str
     date_modified = str
 
-    def __init__(self, review_id, subject, title, rating, score, date, text, username, subj, subj_auth, subj_cont, date_modified):
+    def __init__(self, review_id, subject, title, rating, score, date, text, username, subj, subj_auth, subj_cont,
+                 date_modified):
         self.review_id = review_id
         self.subject = subject
         self.title = title

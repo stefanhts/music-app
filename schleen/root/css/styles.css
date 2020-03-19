@@ -28,6 +28,46 @@ html, body {
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../static/admin/fonts/Comfortaa-SemiBold.woff2') format('woff2'),
+        url('../../static/admin/fonts/Comfortaa-SemiBold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../static/admin/fonts/Comfortaa-Regular.woff2') format('woff2'),
+        url('../../static/admin/fonts/Comfortaa-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../static/admin/fonts/Comfortaa-Medium.woff2') format('woff2'),
+        url('../../static/admin/fonts/Comfortaa-Medium.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../static/admin/fonts/Comfortaa-Light.woff2') format('woff2'),
+        url('../../static/admin/fonts/Comfortaa-Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url('../../static/admin/fonts/Comfortaa-Bold.woff2') format('woff2'),
+        url('../../static/admin/fonts/Comfortaa-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
 .jumbotron {
     background: var(--bg-light);
 }
@@ -60,8 +100,9 @@ html, body {
     padding-top: 2%;
 }
 
-.page-head {
-    font-style: italic;
+.page-title {
+    font-family: 'Comfortaa';
+    font-size: 400%;
 }
 
 .rating {
@@ -85,6 +126,10 @@ html, body {
 
 .review-title {
     padding-top: 10px;
+}
+
+.review-title-text {
+    font-size: 20pt;
 }
 
 .rounded-bottom-corners {

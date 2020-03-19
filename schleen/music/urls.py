@@ -12,4 +12,6 @@ urlpatterns = [
     path('usersongs', views.user_songs, name='mysongs'),
     path('review', views.review, name='review'),
     path('editreview', views.edit_review, name='editreview'),
+    path('upvote', views.upvote, name='upvote'),
+    path('downvote', views.downvote, name='downvote')
 ]

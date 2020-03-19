@@ -220,11 +220,11 @@ def edit_review(request):
     return redirect('review')
 
 
-def generate_review_list(request, display_type):
+def generate_review_list(request, display_type, order_by):
     if display_type == 'user':
-        reviews = Reviews.objects.filter(user=request.user).order_by('date')[::-1]
+        reviews = Reviews.objects.filter(user=request.user).order_by(order_by)[::-1]
     else:
-        reviews = Reviews.objects.all().order_by('date')[::-1]
+        reviews = Reviews.objects.all().order_by(order_by)[::-1]
     review_list = []
     for r in reviews:
         review_id = r.id
@@ -316,7 +316,7 @@ def generate_review_list(request, display_type):
 
 
 def user_reviews(request):
-    review_list = generate_review_list(request, 'user')
+    review_list = generate_review_list(request, 'user', 'date')
     return render(request, 'userreviews.html', {'list': review_list})
 
 
@@ -403,7 +403,32 @@ def topsongs(request):
 
 
 def trending(request):
-    return render(request, 'trending.html')
+    review_list = generate_review_list(request, 'all', 'score')
+    return render(request, 'trending.html', {'list': review_list})
+
+
+def upvote(request):
+    print(request.method)
+    if request.method == 'POST':
+        review_id = request.POST['revid']
+        review = Reviews.objects.filter(id=review_id).first()
+        review.score += 1
+        review.save()
+        return redirect('trending')
+    else:
+        return redirect('trending')
+
+
+def downvote(request):
+    print(request.method)
+    if request.method == 'POST':
+        review_id = request.POST['revid']
+        review = Reviews.objects.filter(id=review_id).first()
+        review.score -= 1
+        review.save()
+        return redirect('trending')
+    else:
+        return redirect('trending')
 
 
 def help(request):

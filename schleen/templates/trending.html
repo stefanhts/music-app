@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
+    <div class="page-title">
+        browse reviews
+    </div>
     <div class="jumbotron">
+
         <div class="d-flex flex-column">
             <div class="row">
                 <div class="col-md-12 mx-auto">
-                    {% for rec in list %}
+                    {% for rev in list %}
                         <div class="col mx-auto">
                             <div class="review-jumbo rounded">
                                 <div class="row review-title">
                                     <div class="col-sm-10 ml-2">
-                                        <span id="id" hidden="true">{{ rec.review_id }}</span>
+                                        <span id="id" hidden="true">{{ rev.review_id }}</span>
                                         <div class="review-title col-lg-12">
-                                            <div class="cm-header" style="font-size: 20pt;">{{ rec.title }}</div>
-                                            <i>a review of {{ rec.subject }}.</i>
+                                            <div class="cm-header review-title-text">{{ rev.title }}</div>
+                                            <i>a review of {{ rev.subject }}.</i>
                                             <div class="rating">
-                                                <span class="rate">{{ rec.rating }}</span>/10.0
+                                                <span>{{ rev.rating }}</span>/10.0
                                             </div>
                                         </div>
                                     </div>
@@ -23,20 +27,20 @@
                                             <p/>
                                             <form action="upvote" method="POST">
                                                 {% csrf_token %}
-                                                <input hidden="true" name="revid" value="{{ rec.review_id }}">
+                                                <input hidden="true" name="revid" value="{{ rev.review_id }}">
                                                 <button class="btn btn-secondary btn-sm float-right" type="submit">
                                                     /\
                                                 </button>
                                             </form>
                                         </div>
                                         <div class="row justify-content-center">
-                                            {{ rec.score }}
+                                            {{ rev.score }}
                                         </div>
                                         <div class="row justify-content-center">
                                             <p/>
                                             <form action="downvote" method="POST">
                                                 {% csrf_token %}
-                                                <input hidden="true" name="revid" value="{{ rec.review_id }}">
+                                                <input hidden="true" name="revid" value="{{ rev.review_id }}">
                                                 <button class="btn btn-secondary btn-sm float-right" type="submit">
                                                     \/
                                                 </button>
@@ -48,7 +52,7 @@
                                 <div class="row">
                                     <div class="col-sm-11 mx-auto review-text-jumbo rounded">
                                         <div class="card-body">
-                                            {{ rec.text }}
+                                            {{ rev.text }}
                                         </div>
                                     </div>
 

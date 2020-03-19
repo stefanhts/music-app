@@ -32,6 +32,10 @@ html, body {
     background: var(--bg-light);
 }
 
+multi-review {
+    padding-top: 10%;
+}
+
 .navbar {
     width: 100%;
 }
@@ -71,11 +75,23 @@ html, body {
 .review-jumbo {
     background-color: var(--text-color);
     color: var(--bg-dark);
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.review-text-jumbo {
+    background-color: #e4ecf5;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.review-title {
+    padding-top: 10px;
 }
 
 .rounded-bottom-corners {
-    /*-moz-border-radius: 8px;*/
-    /*-webkit-border-radius: 8px;*/
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     border-bottom-left-radius: 8px;

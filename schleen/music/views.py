@@ -4,6 +4,8 @@ from django.db import IntegrityError
 from django.contrib import messages
 from enum import Enum
 from datetime import date
+from django.core.mail import send_mail
+from django.conf import settings
 
 # TODO disalow empty fields and duplicate songs
 
@@ -432,6 +434,7 @@ def downvote(request):
 
 
 def help(request):
+    send_email(['schleendevs@gmail.com'], 'test subject', 'test body')
     return render(request, 'help.html')
 
 
@@ -477,3 +480,13 @@ class PrintableReview:
         self.subj_auth = subj_auth
         self.subj_cont = subj_cont
         self.date_modified = date_modified
+
+
+def send_email(recip, subject, body):
+    send_mail(
+        subject,
+        body,
+        settings.EMAIL_HOST_USER,
+        recip,
+        fail_silently=False
+    )

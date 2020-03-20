@@ -434,7 +434,7 @@ def downvote(request):
 
 
 def help(request):
-    send_email(['stefan.heller00@gmail.com'], 'hey', 'u cute. but ya dont have to be such an asshole. also someone just visited the help page.')
+    # send_email(['schleendevs@gmail.com'], 'help!', 'someone visited the help page')
     return render(request, 'help.html')
 
 

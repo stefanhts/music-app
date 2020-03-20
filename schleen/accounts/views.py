@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def register(request):
@@ -21,14 +23,16 @@ def register(request):
                 return redirect('register')
             elif User.objects.filter(email=email).exists():
                 # check if email is taken
-                return redirect('register')
                 messages.info(request, 'This email is already associated with an account')
+                return redirect('register')
             else:
                 # create and login user
                 user = User.objects.create_user(username=username, email=email, password=password1, last_name=last_name,
                                                 first_name=first_name)
                 user.save()
                 print('user created')
+                send_email([email], 'Welcome to schleen!', 'Thank you for creating an account at schleen! Get in there'
+                                                           ' and start doing music things!\n\nschleen devs')
                 auth.login(request, user)
                 return redirect('user')
         else:
@@ -64,3 +68,13 @@ def logout(request):
     # logout user
     auth.logout(request)
     return redirect('/')
+
+
+def send_email(recip, subject, body):
+    send_mail(
+        subject,
+        body,
+        settings.EMAIL_HOST_USER,
+        recip,
+        fail_silently=False
+    )

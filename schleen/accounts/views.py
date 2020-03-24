@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User, auth
 from django.core.mail import send_mail
 from django.conf import settings
+from .models import Friend
 
 
 def register(request):
@@ -64,6 +65,14 @@ def login(request):
         return render(request, 'login.html')
 
 
+def user_friends(request):
+    friends_list = []
+    friends = Friend.objects.filter(user=request.user)
+    for f in friends:
+        friends_list.append(PrintableFriend(name=f.name, desc=f.desc))
+    return render(request, 'userfriends.html', {'list': friends_list})
+
+
 def logout(request):
     # logout user
     auth.logout(request)
@@ -78,3 +87,13 @@ def send_email(recip, subject, body):
         recip,
         fail_silently=False
     )
+
+
+class PrintableFriend:
+    name = str
+    desc = str
+
+    def __init__(self, name, desc):
+        self.name = name
+        self.desc = desc
+

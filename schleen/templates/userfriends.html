@@ -1,1 +1,19 @@
-<h1>Hey there Seañ how's the friends page going?</h1>
+{% extends 'user.html' %}
+{% block body %}
+
+    <div class="d-flex flex-column">
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                <header> Friend's List: </header>
+                {% for friend in list %}
+
+                    <i>{{ friend.name }} : {{ friend.desc }}  </i>
+
+                {%  endfor %}
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+

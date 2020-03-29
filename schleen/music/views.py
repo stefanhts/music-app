@@ -345,7 +345,8 @@ def topsongs(request):
 
     # This checks if request is POST if so gets data, if not redirects
     if request.method == 'POST':
-
+        print(True)
+        error = ''
         artists = [
             request.POST['artist1'],
             request.POST['artist2'],
@@ -397,7 +398,8 @@ def topsongs(request):
                     songs.song.add(song)
             # TODO don't add duplicates, and replace if they are on the same list
             else:
-                messages.info(request, ERROR_MESSAGE)
+                error =ERROR_MESSAGE
+        #TODO add input error responses
         return redirect('user')
 
     else:

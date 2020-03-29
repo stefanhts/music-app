@@ -1,56 +1,74 @@
-{% extends 'base.html' %}
-{% block content %}
-
-    <div class="content col justify-content-center">
-        <div class="page-title">
-            top songs
-        </div>
-        <div class="form-header">
-            <h4 class="header"> Enter your top 5 songs</h4>
-        </div>
-        <form action="topsongs" method="post">
-            {% csrf_token %}
-
-            <div class="form-group">
-                <label for="song1">Title:</label>
-                <input type="text" name="song1" id="song1" placeholder="Happy Birthday">
-                <br/>
-                <label for="artist1">Artist:</label>
-                <input type="text" name="artist1" id="artist1" placeholder="The Beatles">
-            </div>
-            <div class="form-group">
-                <label for="song2">Title:</label>
-                <input type="text" name="song2" id="song2" placeholder="Happy Birthday">
-                <br/>
-                <label for="artist2">Artist:</label>
-                <input type="text" name="artist2" id="artist2" placeholder="The Beatles">
-            </div>
-            <div class="form-group">
-                <label for="song3">Title:</label>
-                <input type="text" name="song3" id="song3" placeholder="Happy Birthday">
-                <br/>
-                <label for="artist3">Artist:</label>
-                <input type="text" name="artist3" id="artist3" placeholder="The Beatles">
-            </div>
-            <div class="form-group">
-                <label for="song4">Title:</label>
-                <input type="text" name="song4" id="song4" placeholder="Happy Birthday">
-                <br/>
-                <label for="artist4">Artist:</label>
-                <input type="text" name="artist4" id="artist4" placeholder="The Beatles">
-            </div>
-            <div class="form-group">
-                <label for="song5">Title:</label>
-                <input type="text" name="song5" id="song5" placeholder="Happy Birthday">
-                <br/>
-                <label for="artist5">Artist:</label>
-                <input type="text" name="artist5" id="artist5" placeholder="The Beatles">
-            </div>
-
-            <button type="submit" class="btn btn-primary">Save</button>
-        </form>
-
+{% extends 'user.html' %}
+{% block body %}
+    <div class="form-header">
+        <h4 class="header"> Enter up to 5 favorite songs</h4>
     </div>
+    <form action="topsongs" method="post" class="form-inline">
+        {% csrf_token %}
+        <div class="col-sm-12 mx-auto">
+            <div class="row">
+                <div class="form-group col-sm-8 song1">
+                    <label for="song1">1)&nbsp;&nbsp;&nbsp;</label>
+                    <input class="form-control" type="text" name="song1" id="song1"
+                           placeholder="Happy Birthday">
+                    &nbsp;by&nbsp;
+                    <input class="form-control" type="text" name="artist1" id="artist1"
+                           placeholder="The Beatles">
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="form-group col-sm-8 song2">
+                    <label for="song2">2)&nbsp;&nbsp;&nbsp;</label>
+                    <input class="form-control" type="text" name="song2" id="song2"
+                           placeholder="Happy Birthday">
+                    &nbsp;by&nbsp;
+                    <input class="form-control" type="text" name="artist2" id="artist2"
+                           placeholder="The Beatles">
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="form-group col-sm-8 song3">
+                    <label for="song3">3)&nbsp;&nbsp;&nbsp;</label>
+                    <input class="form-control" type="text" name="song3" id="song3"
+                           placeholder="Happy Birthday">
+                    &nbsp;by&nbsp;
+                    <input class="form-control" type="text" name="artist3" id="artist3"
+                           placeholder="The Beatles">
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="form-group col-sm-8 song4">
+                    <label for="song4">4)&nbsp;&nbsp;&nbsp;</label>
+                    <input class="form-control" type="text" name="song4" id="song4"
+                           placeholder="Happy Birthday">
+                    &nbsp;by&nbsp;
+                    <input class="form-control" type="text" name="artist4" id="artist4"
+                           placeholder="The Beatles">
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="form-group col-sm-8 song5">
+                    <label for="song5">5)&nbsp;&nbsp;&nbsp;</label>
+                    <input class="form-control" type="text" name="song5" id="song5"
+                           placeholder="Happy Birthday">
+                    &nbsp;by&nbsp;
+                    <input class="form-control" type="text" name="artist5" id="artist5"
+                           placeholder="The Beatles">
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-sm-8">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
 
     <div class="alert">
         {% for message in messages %}
